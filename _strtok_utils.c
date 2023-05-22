@@ -16,7 +16,6 @@ unsigned int check_delimiter(char c, const char *str)
 		if (c == str[i])
 			return (1);
 	}
-
 	return (0);
 }
 
