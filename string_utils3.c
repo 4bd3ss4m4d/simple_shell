@@ -56,3 +56,46 @@ int _strlen(char *str)
 	}
 	return (i);
 }
+
+/**
+ * _atoi - convert to a int
+ * @str: string
+ *
+ * Return: int
+ */
+int _atoi(char *str)
+{
+	int i, j, k, l;
+
+	i = k = 0;
+	l = 1;
+	while ((str[i] < '0' || str[i] > '9') && (str[i] != '\0'))
+	{
+		if (str[i] == '-')
+			l *= -1;
+		i++;
+	}
+	j = i;
+	while ((str[j] >= '0') && (str[j] <= '9'))
+	{
+		k = (k * 10) + l * ((str[j]) - '0');
+		j++;
+	}
+	return (k);
+}
+
+/**
+ * _puts - print a string
+ * @str: pointer char
+ *
+ * return: void
+ */
+void _puts(char *str)
+{
+	int i;
+
+	for (i = 0; str[i] != '\0'; i++)
+		_putchar(str[i]);
+	_putchar('\n');
+}
+
