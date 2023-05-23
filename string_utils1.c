@@ -1,111 +1,91 @@
-#include "simple_shell.h"
+#include "main.h"
 
 /**
- * _strcpy - Copie Source To Destination Char
- * @dest: Destination
- * @src: Source
+ * _memcpy - copies information between void pointers.
+ * @newptr: destination pointer.
+ * @ptr: source pointer.
+ * @size: size of the new pointer.
  *
- * Return: Copie Of Char *
+ * Return: no return.
  */
-char *_strcpy(char *dest, char *src)
+void _memcpy(void *newptr, const void *ptr, unsigned int size)
 {
-	int i;
+	char *char_ptr = (char *)ptr;
+	char *char_newptr = (char *)newptr;
+	unsigned int i;
 
-	i = 0;
-	while (src[i])
+	for (i = 0; i < size; i++)
+		char_newptr[i] = char_ptr[i];
+}
+
+/**
+ * _realloc - reallocates a memory block.
+ * @ptr: pointer to the memory previously allocated.
+ * @old_size: size, in bytes, of the allocated space of ptr.
+ * @new_size: new size, in bytes, of the new memory block.
+ *
+ * Return: ptr.
+ * if new_size == old_size, returns ptr without changes.
+ * if malloc fails, returns NULL.
+ */
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
+{
+	void *newptr;
+
+	if (ptr == NULL)
+		return (malloc(new_size));
+
+	if (new_size == 0)
 	{
-		dest[i] = src[i];
-		i++;
+		free(ptr);
+		return (NULL);
 	}
-	dest[i] = '\0';
-	return (dest);
-}
 
-/**
- * _strcat - Concat Two String
- * @dest: First String
- * @src: Second String
- *
- * Return: First String + Second String Char *
- */
+	if (new_size == old_size)
+		return (ptr);
 
-char *_strcat(char *dest, char *src)
-{
-	char *s = dest;
-
-	while (*dest != '\0')
-		dest++;
-
-	while (*src != '\0')
-	{
-		*dest = *src;
-		dest++;
-		src++;
-	}
-	*dest = '\0';
-	return (s);
-}
-
-/**
- * _strchr - Locate Charactere In String
- * @str: String Search In
- * @c: Char To Search For
- *
- * Return: Pointer To Char*
- */
-
-char *_strchr(char *str, char c)
-{
-
-	do {
-
-		if (*str == c)
-			break;
-	} while (*str++);
-
-	return (str);
-}
-
-/**
- * _strncmp - Compare Amount (n) Of Characters Of Two Strings.
- * @str1: A String.
- * @str2: A String.
- * @n: Amount Of Characters To Compare.
- *
- * Return: 1 If The Strings Don't Match Otherwise 0
- */
-int _strncmp(const char *str1, const char *str2, size_t n)
-{
-	size_t i;
-
-	if (str1 == NULL)
-		return (-1);
-	for (i = 0; i < n && str2[i]; i++)
-	{
-		if (str1[i] != str2[i])
-			return (1);
-	}
-	return (0);
-}
-
-/**
- * _strdup - Duplicate A String
- * @str: String
- *
- * Return: Duplicate String Failed Null
- */
-char *_strdup(char *str)
-{
-	size_t len, i;
-	char *str2;
-
-	len = _strlen(str);
-	str2 = malloc(sizeof(char) * (len + 1));
-	if (!str2)
+	newptr = malloc(new_size);
+	if (newptr == NULL)
 		return (NULL);
 
-	for (i = 0; i <= len; i++)
-		str2[i] = str[i];
+	if (new_size < old_size)
+		_memcpy(newptr, ptr, new_size);
+	else
+		_memcpy(newptr, ptr, old_size);
 
-	return (str2);
+	free(ptr);
+	return (newptr);
+}
+
+/**
+ * _reallocdp - reallocates a memory block of a double pointer.
+ * @ptr: double pointer to the memory previously allocated.
+ * @old_size: size, in bytes, of the allocated space of ptr.
+ * @new_size: new size, in bytes, of the new memory block.
+ *
+ * Return: ptr.
+ * if new_size == old_size, returns ptr without changes.
+ * if malloc fails, returns NULL.
+ */
+char **_reallocdp(char **ptr, unsigned int old_size, unsigned int new_size)
+{
+	char **newptr;
+	unsigned int i;
+
+	if (ptr == NULL)
+		return (malloc(sizeof(char *) * new_size));
+
+	if (new_size == old_size)
+		return (ptr);
+
+	newptr = malloc(sizeof(char *) * new_size);
+	if (newptr == NULL)
+		return (NULL);
+
+	for (i = 0; i < old_size; i++)
+		newptr[i] = ptr[i];
+
+	free(ptr);
+
+	return (newptr);
 }

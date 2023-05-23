@@ -1,116 +1,100 @@
-#include "simple_shell.h"
+#include "main.h"
 
 /**
- * _strcmp - Compare Two String
- * @str1 :String 1
- * @str2: String 2
- *
- * Return: 0 If Identical Otherwise How Much Diffrent
+ * get_len - Get the lenght of a number.
+ * @n: type int number.
+ * Return: Lenght of a number.
  */
-int _strcmp(char *str1, char *str2)
+int get_len(int n)
 {
-	int cmp = 0, i, len1, len2;
+	unsigned int n1;
+	int lenght = 1;
 
-	len1 = _strlen(str1);
-	len2 = _strlen(str2);
-
-	if (str1 == NULL || str2 == NULL)
-		return (1);
-	if (len1 != len2)
-		return (1);
-	for (i = 0; str1[i]; i++)
+	if (n < 0)
 	{
-		if (str1[i] != str2[i])
-		{
-			cmp = str1[i] - str2[i];
-			break;
-		}
-		else
-			continue;
-	}
-	return (cmp);
-}
-
-/**
- * _isalpha - Check if Alphabtic
- *@c: Character
- *
- * Return: 1 If True 0 If Not
- */
-int _isalpha(int c)
-{
-	if (((c >= 97) && (c <= 122)) || ((c >= 65) && (c <= 90)))
-	{
-		return (1);
+		lenght++;
+		n1 = n * -1;
 	}
 	else
 	{
-		return (0);
+		n1 = n;
 	}
+	while (n1 > 9)
+	{
+		lenght++;
+		n1 = n1 / 10;
+	}
+
+	return (lenght);
 }
-
 /**
- * _itoa - Convert Integer To Char
- * @n: Int To Convert
- * Return: Char Pointer
+ * aux_itoa - function converts int to string.
+ * @n: type int number
+ * Return: String.
  */
-char *_itoa(unsigned int n)
+char *aux_itoa(int n)
 {
-	int len = 0, i = 0;
-	char *s;
+	unsigned int n1;
+	int lenght = get_len(n);
+	char *buffer;
 
-	len = int_length(n);
-	s = malloc(len + 1);
-	if (!s)
+	buffer = malloc(sizeof(char) * (lenght + 1));
+	if (buffer == 0)
 		return (NULL);
-	*s = '\0';
-	while (n / 10)
+
+	*(buffer + lenght) = '\0';
+
+	if (n < 0)
 	{
-		s[i] = (n % 10) + '0';
-		n /= 10;
-		i++;
+		n1 = n * -1;
+		buffer[0] = '-';
 	}
-	s[i] = (n % 10) + '0';
-	array_rev(s, len);
-	s[i + 1] = '\0';
-	return (s);
+	else
+	{
+		n1 = n;
+	}
+
+	lenght--;
+	do {
+		*(buffer + lenght) = (n1 % 10) + '0';
+		n1 = n1 / 10;
+		lenght--;
+	}
+	while (n1 > 0)
+		;
+	return (buffer);
 }
 
 /**
- *  array_rev - Reverse Array
- * @arr: Array To Reverse
- * @len: Length Of Array
- *
- * Return: Void(Reverse Array)
+ * _atoi - converts a string to an integer.
+ * @s: input string.
+ * Return: integer.
  */
-void array_rev(char *arr, int len)
+int _atoi(char *s)
 {
-	int i;
-	char tmp;
+	unsigned int count = 0, size = 0, oi = 0, pn = 1, m = 1, i;
 
-	for (i = 0; i < (len / 2); i++)
+	while (*(s + count) != '\0')
 	{
-		tmp = arr[i];
-		arr[i] = arr[(len - 1) - i];
-		arr[(len - 1) - i] = tmp;
+		if (size > 0 && (*(s + count) < '0' || *(s + count) > '9'))
+			break;
+
+		if (*(s + count) == '-')
+			pn *= -1;
+
+		if ((*(s + count) >= '0') && (*(s + count) <= '9'))
+		{
+			if (size > 0)
+				m *= 10;
+			size++;
+		}
+		count++;
 	}
-}
 
-/**
- * int_length - Determine Length Of Int
- * @n: Given Int
- *
- * Return: Length Of Int
- */
-int int_length(int n)
-{
-	int len = 0;
-
-	while (n != 0)
+	for (i = count - size; i < count; i++)
 	{
-		len++;
-		n /= 10;
+		oi = oi + ((*(s + i) - 48) * m);
+		m /= 10;
 	}
-	return (len);
+	return (oi * pn);
 }
-
