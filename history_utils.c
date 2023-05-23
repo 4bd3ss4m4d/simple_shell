@@ -1,4 +1,4 @@
-i#include "simple_shell.h"
+#include "simple_shell.h"
 
 /**
  * free_env - Free environment variable array
@@ -41,4 +41,3 @@ int history(char *command)
 	}
 	return (1);
 }
-
