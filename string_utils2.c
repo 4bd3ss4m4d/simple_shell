@@ -1,24 +1,59 @@
 #include "main.h"
 
 /**
- * get_len - Get the lenght of a number.
- * @n: type int number.
- * Return: Lenght of a number.
+ * conv_itoa - Converts an integer to a string.
+ * @number: The integer number to convert.
+ *
+ * Return: The string representation of the integer.
  */
-int get_len(int n)
+char *conv_itoa(int number)
+{
+	unsigned int n1;
+	int len = get_length(number);
+	char *buff;
+
+	buff = malloc(sizeof(char) * (len + 1));
+	if (buff == 0)
+		return (NULL);
+
+	*(buff + len) = '\0';
+
+	if (number < 0)
+	{
+		n1 = number * -1;
+		buff[0] = '-';
+	}
+	else
+		n1 = number;
+
+	len--;
+	do
+	{
+		*(buff + len) = (n1 % 10) + '0';
+		n1 = n1 / 10;
+		len--;
+	} while (n1 > 0);
+	return (buff);
+}
+
+/**
+ * get_length - Get the length of a number.
+ * @number: The number for which to calculate the length.
+ *
+ * Return: The length of the number.
+ */
+int get_length(int number)
 {
 	unsigned int n1;
 	int lenght = 1;
 
-	if (n < 0)
+	if (number < 0)
 	{
 		lenght++;
-		n1 = n * -1;
+		n1 = number * -1;
 	}
 	else
-	{
-		n1 = n;
-	}
+		n1 = number;
 	while (n1 > 9)
 	{
 		lenght++;
@@ -27,73 +62,37 @@ int get_len(int n)
 
 	return (lenght);
 }
-/**
- * aux_itoa - function converts int to string.
- * @n: type int number
- * Return: String.
- */
-char *aux_itoa(int n)
-{
-	unsigned int n1;
-	int lenght = get_len(n);
-	char *buffer;
-
-	buffer = malloc(sizeof(char) * (lenght + 1));
-	if (buffer == 0)
-		return (NULL);
-
-	*(buffer + lenght) = '\0';
-
-	if (n < 0)
-	{
-		n1 = n * -1;
-		buffer[0] = '-';
-	}
-	else
-	{
-		n1 = n;
-	}
-
-	lenght--;
-	do {
-		*(buffer + lenght) = (n1 % 10) + '0';
-		n1 = n1 / 10;
-		lenght--;
-	}
-	while (n1 > 0)
-		;
-	return (buffer);
-}
 
 /**
- * _atoi - converts a string to an integer.
- * @s: input string.
- * Return: integer.
+ * _atoi - Converts a string to an integer.
+ * @str: Input string.
+ *
+ * Return: The converted integer.
  */
-int _atoi(char *s)
+int _atoi(char *str)
 {
-	unsigned int count = 0, size = 0, oi = 0, pn = 1, m = 1, i;
+	unsigned int counter = 0, size = 0, oi = 0, pn = 1, m = 1, i;
 
-	while (*(s + count) != '\0')
+	while (*(str + counter) != '\0')
 	{
-		if (size > 0 && (*(s + count) < '0' || *(s + count) > '9'))
+		if (size > 0 && (*(str + counter) < '0' || *(str + counter) > '9'))
 			break;
 
-		if (*(s + count) == '-')
+		if (*(str + counter) == '-')
 			pn *= -1;
 
-		if ((*(s + count) >= '0') && (*(s + count) <= '9'))
+		if ((*(str + counter) >= '0') && (*(str + counter) <= '9'))
 		{
 			if (size > 0)
 				m *= 10;
 			size++;
 		}
-		count++;
+		counter++;
 	}
 
-	for (i = count - size; i < count; i++)
+	for (i = counter - size; i < counter; i++)
 	{
-		oi = oi + ((*(s + i) - 48) * m);
+		oi = oi + ((*(str + i) - 48) * m);
 		m /= 10;
 	}
 	return (oi * pn);
