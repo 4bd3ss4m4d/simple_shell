@@ -59,7 +59,7 @@ void disp_help_env(void)
 }
 
 /**
- * disp_help_setenv - Help information for the builtin setenv
+ * disp_help_setenv - Help information for setenv
  *
  * Return: no return
  */
