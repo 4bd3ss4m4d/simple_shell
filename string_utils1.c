@@ -5,7 +5,7 @@
  *           pointer to the destination pointer.
  * @new_pointer: The destination pointer.
  * @pointer: The source pointer.
- * @size: The size of the new pointer.
+ * @s: The size of the new pointer.
  *
  * Return: None.
  */
