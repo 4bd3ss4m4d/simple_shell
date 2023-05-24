@@ -81,7 +81,7 @@ int check_cdir(char *filepath, int *index)
  *
  * Return: 1 if there is an error, 0 if not.
  */
-int check_error_command(char *dir_dest, datashell *datashell)
+int check_error_command(char *dir_dest, shll_comm *datashell)
 {
 	if (dir_dest == NULL)
 	{
@@ -117,7 +117,7 @@ int check_error_command(char *dir_dest, datashell *datashell)
  *
  * Return: 1 on success.
  */
-int command_exec(datashell *datashell)
+int command_exec(shll_comm *datashell)
 {
 	pid_t pidm, wpid;
 	int stte, exc;
@@ -145,7 +145,7 @@ int command_exec(datashell *datashell)
 	}
 	else if (pidm < 0)
 	{
-		perror(datashell->av[0]);
+		perror(datashell->argv[0]);
 		return (1);
 	}
 	else
@@ -155,7 +155,7 @@ int command_exec(datashell *datashell)
 		} while (!WIFEXITED(stte) && !WIFSIGNALED(stte));
 	}
 
-	datashell->status = stte / 256;
+	datashell->stat = stte / 256;
 
 	return (1);
 }
@@ -166,7 +166,7 @@ int command_exec(datashell *datashell)
  *
  * Return: 0 if it's not an executable, otherwise a positive number.
  */
-int is_exec(datashell *datashell)
+int is_exec(shll_comm *datashell)
 {
 	struct stat status;
 	int index;
