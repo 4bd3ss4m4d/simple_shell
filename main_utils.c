@@ -8,7 +8,7 @@
  *
  * Return: Error value
  */
-int get_err(datashell *datashell, int error_val)
+int get_err(shll_comm *datashell, int error_val)
 {
 	char *error;
 
@@ -35,7 +35,7 @@ int get_err(datashell *datashell, int error_val)
 		write(STDERR_FILENO, error, _strlen(error));
 		free(error);
 	}
-	datashell->status = error_val;
+	datashell->stat = error_val;
 	return (error_val);
 }
 
@@ -45,7 +45,7 @@ int get_err(datashell *datashell, int error_val)
  *
  * Return: no return.
  */
-void empty_data(datashell *data_shell)
+void empty_data(shll_comm *data_shell)
 {
 	unsigned int index;
 
@@ -63,14 +63,14 @@ void empty_data(datashell *data_shell)
  *
  * Return: no return
  */
-void set_datashell(datashell *data_shell, char **argv)
+void set_datashell(shll_comm *data_shell, char **argv)
 {
 	unsigned int i;
 
-	data_shell->av = argv;
+	data_shell->argv = argv;
 	data_shell->input = NULL;
 	data_shell->args = NULL;
-	data_shell->status = 0;
+	data_shell->stat = 0;
 	data_shell->counter = 1;
 	for (i = 0; environ[i]; i++)
 		;
@@ -90,7 +90,7 @@ void set_datashell(datashell *data_shell, char **argv)
  *
  * Return: 1
  */
-int get_hlp(datashell *data_shll)
+int get_hlp(shll_comm *data_shll)
 {
 
 	if (data_shll->args[1] == 0)
@@ -112,7 +112,7 @@ int get_hlp(datashell *data_shll)
 	else
 		write(STDERR_FILENO, data_shll->args[0],
 		      _strlen(data_shll->args[0]));
-	data_shll->status = 0;
+	data_shll->stat = 0;
 	return (1);
 }
 
@@ -122,7 +122,7 @@ int get_hlp(datashell *data_shll)
  *
  * Return: Function pointer of the builtin command
  */
-int (*get_bltn(char *command))(datashell *)
+int (*get_bltn(char *command))(shll_comm *)
 {
 	builtin_t bltn[] = {
 	    {"env", display_env},
@@ -134,9 +134,9 @@ int (*get_bltn(char *command))(datashell *)
 	    {NULL, NULL}};
 	int index;
 
-	for (index = 0; bltn[index].name; index++)
+	for (index = 0; bltn[index].commname; index++)
 	{
-		if (_strcmp(bltn[index].name, command) == 0)
+		if (_strcmp(bltn[index].commname, command) == 0)
 			break;
 	}
 	return (bltn[index].f);
