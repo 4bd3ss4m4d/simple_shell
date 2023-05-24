@@ -1,89 +1,115 @@
 #include "main.h"
 
 /**
- * _memcpy - Copies a block of memory from the source
- *           pointer to the destination pointer.
- * @new_pointer: The destination pointer.
- * @pointer: The source pointer.
- * @s: The size of the new pointer.
+ * add_ln_nd_end - Adds a command line at the end of a line_list.
+ * @hd: Head of the linked list.
+ * @cmd_line: Command line.
  *
- * Return: None.
+ * Return: Address of the head.
  */
-void _memcpy(void *new_pointer, const void *pointer, unsigned int s)
+line_list *add_ln_nd_end(line_list **hd, char *cmd_line)
 {
-	char *char_ptr = (char *)pointer;
-	char *char_newptr = (char *)new_pointer;
-	unsigned int i;
+	line_list *nw, *tmp;
 
-	for (i = 0; i < s; i++)
-		char_newptr[i] = char_ptr[i];
-}
-
-/**
- * _realloc - Reallocates a memory block with a new size.
- * @pointer: Pointer to the memory previously allocated.
- * @old_s: Size, in bytes, of the allocated space for ptr.
- * @new_s: New size, in bytes, of the reallocated memory block.
- *
- * Return: Pointer to the reallocated memory block (ptr).
- */
-void *_realloc(void *pointer, unsigned int old_s, unsigned int new_s)
-{
-	void *newptr;
-
-	if (pointer == NULL)
-		return (malloc(new_s));
-
-	if (new_s == 0)
-	{
-		free(pointer);
+	nw = malloc(sizeof(line_list));
+	if (nw == NULL)
 		return (NULL);
+
+	nw->line = cmd_line;
+	nw->next = NULL;
+	tmp = *hd;
+
+	if (tmp == NULL)
+	{
+		*hd = nw;
+	}
+	else
+	{
+		while (tmp->next != NULL)
+			tmp = tmp->next;
+		tmp->next = nw;
 	}
 
-	if (new_s == old_s)
-		return (pointer);
-
-	newptr = malloc(new_s);
-	if (newptr == NULL)
-		return (NULL);
-
-	if (new_s < old_s)
-		_memcpy(newptr, pointer, new_s);
-	else
-		_memcpy(newptr, pointer, old_s);
-
-	free(pointer);
-	return (newptr);
+	return (*hd);
 }
 
 /**
- * _reallocdp - Reallocates a memory block of a double pointer.
- * @pointer: Double pointer to the memory previously allocated.
- * @old_s: Size, in bytes, of the allocated space for pointer.
- * @new_s: New size, in bytes, of the reallocated memory block.
+ * free_line_ls - Frees a line_list.
+ * @hd: Head of the linked list.
  *
- * Return: Pointer to the reallocated memory block (pointer).
+ * Return: No return.
  */
-char **_reallocdp(char **pointer, unsigned int old_s, unsigned int new_s)
+void free_line_ls(line_list **hd)
 {
-	char **newptr;
-	unsigned int i;
+	line_list *tmp;
+	line_list *current;
 
-	if (pointer == NULL)
-		return (malloc(sizeof(char *) * new_s));
+	if (hd != NULL)
+	{
+		current = *hd;
+		while ((tmp = current) != NULL)
+		{
+			current = current->next;
+			free(tmp);
+		}
+		*hd = NULL;
+	}
+}
 
-	if (new_s == old_s)
-		return (pointer);
+/**
+ * add_node_en - Adds a separator found at the end
+ * of a sep_list.
+ * @hd: Head of the linked list.
+ * @sp: Separator found (; | &).
+ *
+ * Return: Address of the head.
+ */
+sep_list *add_node_en(sep_list **hd, char sp)
+{
+	sep_list *new_n, *tmp;
 
-	newptr = malloc(sizeof(char *) * new_s);
-	if (newptr == NULL)
+	new_n = malloc(sizeof(sep_list));
+	if (new_n == NULL)
 		return (NULL);
 
-	for (i = 0; i < old_s; i++)
-		newptr[i] = pointer[i];
+	new_n->sep = sp;
+	new_n->next = NULL;
+	tmp = *hd;
 
-	free(pointer);
+	if (tmp == NULL)
+	{
+		*hd = new_n;
+	}
+	else
+	{
+		while (tmp->next != NULL)
+			tmp = tmp->next;
+		tmp->next = new_n;
+	}
 
-	return (newptr);
+	return (*hd);
+}
+
+/**
+ * free_sp_ls - Frees a sep_list.
+ * @hd: Head of the linked list.
+ *
+ * Return: No return.
+ */
+void free_sp_ls(sep_list **hd)
+{
+	sep_list *tmp;
+	sep_list *current;
+
+	if (hd != NULL)
+	{
+		current = *hd;
+		while ((tmp = current) != NULL)
+		{
+			current = current->next;
+			free(tmp);
+		}
+		*hd = NULL;
+	}
 }
 
