@@ -8,7 +8,7 @@
  *
  * Return: No return.
  */
-void verify_env(r_var **hd, char *inp, datashell *shell_data)
+void verify_env(r_var **hd, char *inp, shll_comm *shell_data)
 {
 	int line, charc, i, left_value;
 	char **_env;
@@ -102,7 +102,7 @@ char *rpl_inp(r_var **hd, char *inp, char *new_inp, int numlen)
  *
  * Return: Number of characters processed.
  */
-int verify_vars(r_var **header, char *inp, char *str, datashell *datashell)
+int verify_vars(r_var **header, char *inp, char *str, shll_comm *datashell)
 {
 	int i, leftst, leftpd;
 
@@ -158,4 +158,3 @@ int compare_envname(const char *name_env, const char *name_ptr)
 
 	return (index + 1);
 }
-

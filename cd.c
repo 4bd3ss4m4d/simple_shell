@@ -6,7 +6,7 @@
  *
  * Return: 1 on success.
  */
-int changedir_shell(datashell *data_sh)
+int changedir_shell(shll_comm *data_sh)
 {
 	int inhome, inhome2, isdashboard;
 	char *directory = data_sh->args[1];
@@ -44,11 +44,11 @@ int changedir_shell(datashell *data_sh)
 /**
  * chandir_dor - Changes to the parent directory.
  * @data_sh: Pointer to the data structure containing the
- *	   environment variables.
+ *           environment variables.
  *
  * Return: No return value.
  */
-void chandir_dor(datashell *data_sh)
+void chandir_dor(shll_comm *data_sh)
 {
 	char pwd[PATH_MAX];
 	char *directory, *cp_printwd, *cp_strtok_pwd;
@@ -88,18 +88,18 @@ void chandir_dor(datashell *data_sh)
 		chdir("/");
 		set_env("PWD", "/", data_sh);
 	}
-	data_sh->status = 0;
+	data_sh->stat = 0;
 	free(cp_printwd);
 }
 
 /**
  * cd_to_dist - Changes to a directory specified by the user.
  * @data_sh: Pointer to the data structure containing
- *	   the directories.
+ *           the directories.
  *
  * Return: No return value.
  */
-void cd_to_dist(datashell *data_sh)
+void cd_to_dist(shll_comm *data_sh)
 {
 	char printwd[PATH_MAX];
 	char *directory, *cp_pwd, *cp_dir;
@@ -122,7 +122,7 @@ void cd_to_dist(datashell *data_sh)
 	free(cp_pwd);
 	free(cp_dir);
 
-	data_sh->status = 0;
+	data_sh->stat = 0;
 
 	chdir(directory);
 }
@@ -130,11 +130,11 @@ void cd_to_dist(datashell *data_sh)
 /**
  * changedir_prev - Changes to the previous directory.
  * @data_sh: Data relevant to the environment and
- *	   directories.
+ *           directories.
  *
  * Return: No return value.
  */
-void changedir_prev(datashell *data_sh)
+void changedir_prev(shll_comm *data_sh)
 {
 	char pwd[PATH_MAX];
 	char *p_pwd, *p_oldpwd, *cp_pwd, *cp_oldpwd;
@@ -165,7 +165,7 @@ void changedir_prev(datashell *data_sh)
 	if (p_oldpwd)
 		free(cp_oldpwd);
 
-	data_sh->status = 0;
+	data_sh->stat = 0;
 
 	chdir(p_pwd);
 }
@@ -176,7 +176,7 @@ void changedir_prev(datashell *data_sh)
  *
  * Return: No return value.
  */
-void changedir_to_home(datashell *data_sh)
+void changedir_to_home(shll_comm *data_sh)
 {
 	char *print_pwd, *home;
 	char pwd[PATH_MAX];
@@ -203,6 +203,5 @@ void changedir_to_home(datashell *data_sh)
 	set_env("OLDPWD", print_pwd, data_sh);
 	set_env("PWD", home, data_sh);
 	free(print_pwd);
-	data_sh->status = 0;
+	data_sh->stat = 0;
 }
-

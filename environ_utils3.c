@@ -6,8 +6,8 @@
  * @_env: Array of environment variables.
  *
  * Return: A pointer to the value of the environment variable
- *	 if it is found.
- *	 NULL if the environment variable is not found.
+ *         if it is found.
+ *         NULL if the environment variable is not found.
  */
 char *get_environ(const char *envname, char **_env)
 {
@@ -36,11 +36,11 @@ char *get_environ(const char *envname, char **_env)
 /**
  * display_env - Print the environment variables.
  * @data_sh: Pointer to the data structure containing the
- *	   environment variables.
+ *           environment variables.
  *
  * Return: 1 on success.
  */
-int display_env(datashell *data_sh)
+int display_env(shll_comm *data_sh)
 {
 	int l, m;
 
@@ -53,7 +53,7 @@ int display_env(datashell *data_sh)
 		write(STDOUT_FILENO, data_sh->_env[l], m);
 		write(STDOUT_FILENO, "\n", 1);
 	}
-	data_sh->status = 0;
+	data_sh->stat = 0;
 
 	return (1);
 }

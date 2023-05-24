@@ -33,7 +33,7 @@ int first_character(char *inp, int *index)
  *
  * Return: No return value.
  */
-void disp_syn_err(datashell *data_sh, char *inp, int index, int boolean)
+void disp_syn_err(shll_comm *data_sh, char *inp, int index, int boolean)
 {
 	char *msg, *msg2, *msg3, *error, *counter;
 	int length;
@@ -55,7 +55,7 @@ void disp_syn_err(datashell *data_sh, char *inp, int index, int boolean)
 	msg2 = ": Syntax error: \"";
 	msg3 = "\" unexpected\n";
 	counter = conv_itoa(data_sh->counter);
-	length = _strlen(data_sh->av[0]) + _strlen(counter);
+	length = _strlen(data_sh->argv[0]) + _strlen(counter);
 	length += _strlen(msg) + _strlen(msg2) + _strlen(msg3) + 2;
 
 	error = malloc(sizeof(char) * (length + 1));
@@ -64,7 +64,7 @@ void disp_syn_err(datashell *data_sh, char *inp, int index, int boolean)
 		free(counter);
 		return;
 	}
-	_strcpy(error, data_sh->av[0]);
+	_strcpy(error, data_sh->argv[0]);
 	_strcat(error, ": ");
 	_strcat(error, counter);
 	_strcat(error, msg2);
@@ -84,7 +84,7 @@ void disp_syn_err(datashell *data_sh, char *inp, int index, int boolean)
  *
  * Return: 1 if there is an error, 0 otherwise.
  */
-int ch_syn_err(datashell *data_sh, char *inptrt)
+int ch_syn_err(shll_comm *data_sh, char *inptrt)
 {
 	int start = 0, fcharac = 0, index = 0;
 
@@ -170,4 +170,3 @@ int sep_oper_error(char *inp, int index, char lastchar)
 
 	return (sep_oper_error(inp + 1, index + 1, *inp));
 }
-
