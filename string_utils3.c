@@ -6,7 +6,8 @@
  * @str: Pointer to the string to search.
  * @acc: Pointer to the accepted bytes.
  *
- * Return: The length of the prefix substring that consists of only accepted bytes.
+ * Return: The length of the prefix substring that consists
+ *         of only accepted bytes.
  */
 int _strspn(char *str, char *acc)
 {

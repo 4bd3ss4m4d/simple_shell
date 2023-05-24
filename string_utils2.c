@@ -27,8 +27,7 @@ char *conv_itoa(int number)
 		n1 = number;
 
 	len--;
-	do
-	{
+	do {
 		*(buff + len) = (n1 % 10) + '0';
 		n1 = n1 / 10;
 		len--;
