@@ -9,15 +9,15 @@
  */
 int main(int argc, char **argv)
 {
-	datashell datash;
+	shll_comm datash;
 	(void)argc;
 
 	signal(SIGINT, get_sigint);
 	set_datashell(&datash, argv);
 	looping_shll(&datash);
 	empty_data(&datash);
-	if (datash.status < 0)
+	if (datash.stat < 0)
 		return (255);
-	return (datash.status);
+	return (datash.stat);
 }
 
