@@ -112,4 +112,3 @@ void free_sp_ls(sep_list **hd)
 		*hd = NULL;
 	}
 }
-

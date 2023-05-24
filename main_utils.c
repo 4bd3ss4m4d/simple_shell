@@ -141,4 +141,3 @@ int (*get_bltn(char *command))(shll_comm *)
 	}
 	return (bltn[index].f);
 }
-

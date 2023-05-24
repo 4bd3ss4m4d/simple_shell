@@ -20,4 +20,3 @@ int main(int argc, char **argv)
 		return (255);
 	return (datash.stat);
 }
-

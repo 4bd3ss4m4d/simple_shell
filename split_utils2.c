@@ -203,4 +203,3 @@ r_var *add_var_nd(r_var **hd, int lenvar, char *value, int lenval)
 
 	return (*hd);
 }
-
