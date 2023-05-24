@@ -1,89 +1,160 @@
 #include "main.h"
 
 /**
- * _memcpy - Copies a block of memory from the source
- *           pointer to the destination pointer.
- * @new_pointer: The destination pointer.
- * @pointer: The source pointer.
- * @s: The size of the new pointer.
+ * move_nxt - Moves to the next command line stored.
+ * @lis_s: Separator list.
+ * @lis_l: Command line list.
+ * @data_shell: Data structure.
  *
- * Return: None.
+ * Return: No return value.
  */
-void _memcpy(void *new_pointer, const void *pointer, unsigned int s)
+void move_nxt(sep_list **lis_s, line_list **lis_l, shll_comm *data_shell)
 {
-	char *char_ptr = (char *)pointer;
-	char *char_newptr = (char *)new_pointer;
-	unsigned int i;
+	int loop_sep;
+	sep_list *ls_s;
+	line_list *ls_l;
 
-	for (i = 0; i < s; i++)
-		char_newptr[i] = char_ptr[i];
+	loop_sep = 1;
+	ls_s = *lis_s;
+	ls_l = *lis_l;
+
+	while (ls_s != NULL && loop_sep)
+	{
+		if (data_shell->stat == 0)
+		{
+			if (ls_s->sep == '&' || ls_s->sep == ';')
+				loop_sep = 0;
+			if (ls_s->sep == '|')
+				ls_l = ls_l->next, ls_s = ls_s->next;
+		}
+		else
+		{
+			if (ls_s->sep == '|' || ls_s->sep == ';')
+				loop_sep = 0;
+			if (ls_s->sep == '&')
+				ls_l = ls_l->next, ls_s = ls_s->next;
+		}
+		if (ls_s != NULL && !loop_sep)
+			ls_s = ls_s->next;
+	}
+	*lis_s = ls_s;
+	*lis_l = ls_l;
 }
 
 /**
- * _realloc - Reallocates a memory block with a new size.
- * @pointer: Pointer to the memory previously allocated.
- * @old_s: Size, in bytes, of the allocated space for ptr.
- * @new_s: New size, in bytes, of the reallocated memory block.
+ * swp_character - Swaps '|' and '&' for non-printed characters
+ *                 in a string.
+ * @inp: Input string.
+ * @boolean: Type of swap. If boolean is 0, swaps '|' and '&'
+ *           for non-printed characters.
  *
- * Return: Pointer to the reallocated memory block (ptr).
+ * Return: Swapped string.
  */
-void *_realloc(void *pointer, unsigned int old_s, unsigned int new_s)
+char *swp_character(char *inp, int boolean)
 {
-	void *newptr;
+	int i;
 
-	if (pointer == NULL)
-		return (malloc(new_s));
-
-	if (new_s == 0)
+	if (boolean == 0)
 	{
-		free(pointer);
-		return (NULL);
+		for (i = 0; inp[i]; i++)
+		{
+			if (inp[i] == '|')
+			{
+				if (inp[i + 1] != '|')
+					inp[i] = 16;
+				else
+					i++;
+			}
+
+			if (inp[i] == '&')
+			{
+				if (inp[i + 1] != '&')
+					inp[i] = 12;
+				else
+					i++;
+			}
+		}
+	}
+	else
+	{
+		for (i = 0; inp[i]; i++)
+		{
+			inp[i] = (inp[i] == 16 ? '|' : inp[i]);
+			inp[i] = (inp[i] == 12 ? '&' : inp[i]);
+		}
+	}
+	return (inp);
+}
+
+/**
+ * add_nd - Adds separators and command lines to the lists.
+ * @hd_s: Head of the separator list.
+ * @hd_l: Head of the command lines list.
+ * @inp: Input string.
+ *
+ * Return: No return value.
+ */
+void add_nd(sep_list **hd_s, line_list **hd_l, char *inp)
+{
+	int i;
+	char *command_line;
+
+	inp = swp_character(inp, 0);
+
+	for (i = 0; inp[i]; i++)
+	{
+		if (inp[i] == ';')
+			add_node_en(hd_s, inp[i]);
+
+		if (inp[i] == '|' || inp[i] == '&')
+		{
+			add_node_en(hd_s, inp[i]);
+			i++;
+		}
 	}
 
-	if (new_s == old_s)
-		return (pointer);
-
-	newptr = malloc(new_s);
-	if (newptr == NULL)
-		return (NULL);
-
-	if (new_s < old_s)
-		_memcpy(newptr, pointer, new_s);
-	else
-		_memcpy(newptr, pointer, old_s);
-
-	free(pointer);
-	return (newptr);
+	command_line = _strtok(inp, ";|&");
+	do {
+		command_line = swp_character(command_line, 1);
+		add_ln_nd_end(hd_l, command_line);
+		command_line = _strtok(NULL, ";|&");
+	} while (command_line != NULL);
 }
 
 /**
- * _reallocdp - Reallocates a memory block of a double pointer.
- * @pointer: Double pointer to the memory previously allocated.
- * @old_s: Size, in bytes, of the allocated space for pointer.
- * @new_s: New size, in bytes, of the reallocated memory block.
+ * read_line - Reads the input string.
+ * @int_eof: Return value of the getline function.
  *
- * Return: Pointer to the reallocated memory block (pointer).
+ * Return: Input string.
  */
-char **_reallocdp(char **pointer, unsigned int old_s, unsigned int new_s)
+char *read_line(int *int_eof)
 {
-	char **newptr;
-	unsigned int i;
+	char *inp = NULL;
+	size_t buffersize = 0;
 
-	if (pointer == NULL)
-		return (malloc(sizeof(char *) * new_s));
+	*int_eof = getline(&inp, &buffersize, stdin);
 
-	if (new_s == old_s)
-		return (pointer);
-
-	newptr = malloc(sizeof(char *) * new_s);
-	if (newptr == NULL)
-		return (NULL);
-
-	for (i = 0; i < old_s; i++)
-		newptr[i] = pointer[i];
-
-	free(pointer);
-
-	return (newptr);
+	return (inp);
 }
 
+/**
+ * free_value_ls - Frees a r_var list.
+ * @hd: Head of the linked list.
+ * Return: No return.
+ */
+void free_value_ls(r_var **hd)
+{
+	r_var *tmp;
+	r_var *current;
+
+	if (hd != NULL)
+	{
+		current = *hd;
+		while ((tmp = current) != NULL)
+		{
+			current = current->next;
+			free(tmp);
+		}
+		*hd = NULL;
+	}
+}

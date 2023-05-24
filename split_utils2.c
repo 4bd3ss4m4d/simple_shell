@@ -51,7 +51,7 @@ char **splt_ln(char *inp)
  *
  * Return: 0 to exit, 1 to continue.
  */
-int split_cmds(datashell *datashell, char *inp)
+int split_cmds(shll_comm *datashell, char *inp)
 {
 
 	sep_list *hd_s, *ls_s;
@@ -131,7 +131,7 @@ char *without_cmt(char *input)
  *
  * Return: No return.
  */
-void looping_shll(datashell *data_shell)
+void looping_shll(shll_comm *data_shell)
 {
 	int looping, int_eof;
 	char *inp;
@@ -149,7 +149,7 @@ void looping_shll(datashell *data_shell)
 
 			if (ch_syn_err(data_shell, inp) == 1)
 			{
-				data_shell->status = 2;
+				data_shell->stat = 2;
 				free(inp);
 				continue;
 			}
